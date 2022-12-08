@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Npgsql;
 using System.Data;
 
+
 namespace MVC_ASP.Controllers
 {
     public class HomeController : Controller
@@ -64,12 +65,51 @@ namespace MVC_ASP.Controllers
         }
 
 
-        public IActionResult Privacy()
+        public IActionResult Rambut()
         {
             return View();
         }
-
+        public IActionResult HairSpa()
+        {
+            return View();
+        }
+        public IActionResult HairMask()
+        {
+            return View();
+        }
+        public IActionResult CreamBath()
+        {
+            return View();
+        }
+        public IActionResult PotongRambut()
+        {
+            return View();
+        }
+        public IActionResult CuciBlowRambut()
+        {
+            return View();
+        }
+        public IActionResult Wajah()
+        {
+            return View();
+        }
+        public IActionResult MakeUp()
+        {
+            return View();
+        }
+        public IActionResult Masker()
+        {
+            return View();
+        }
+        public IActionResult FacialWajah()
+        {
+            return View();
+        }
         public IActionResult Insert()
+        {
+            return View();
+        }
+        public IActionResult Insert2()
         {
             return View();
         }
@@ -128,6 +168,26 @@ namespace MVC_ASP.Controllers
             new NpgsqlParameter("@usia", user.Usia),
             new NpgsqlParameter("@jenis_perawatan", user.Jenis),
             new NpgsqlParameter("@tanggal_perawatan", user.Tanggal),
+
+        };
+
+            query = "INSERT INTO pengguna.\"Pelanggan\" VALUES (@id_pelanggan, @nama_pelanggan, @usia, @jenis_perawatan, @tanggal_perawatan);";
+            helper.DBConn(ref ds, query, param);
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult InsertUser2(UserModel user)
+        {
+            ds = new DataSet();
+            param = new NpgsqlParameter[] {
+            // Parameter untuk id dan username
+            new NpgsqlParameter("@id_pelanggan", user.Id),
+            new NpgsqlParameter("@nama_pelanggan", user.Username),
+            new NpgsqlParameter("@usia", user.Usia),
+            new NpgsqlParameter("@jenis_perawatan", user.Jenis),
+            new NpgsqlParameter("@tanggal_perawatan", user.Tanggal)
+
         };
 
             query = "INSERT INTO pengguna.\"Pelanggan\" VALUES (@id_pelanggan, @nama_pelanggan, @usia, @jenis_perawatan, @tanggal_perawatan);";
@@ -145,6 +205,7 @@ namespace MVC_ASP.Controllers
             new NpgsqlParameter("@usia", user.Usia),
             new NpgsqlParameter("@jenis_perawatan", user.Jenis),
             new NpgsqlParameter("@tanggal_perawatan", user.Tanggal),
+
         };
 
             query = "UPDATE pengguna.\"Pelanggan\" SET nama_pelanggan = @nama_pelanggan, usia = @usia, jenis_perawatan = @jenis_perawatan, tanggal_perawatan = @tanggal_perawatan WHERE id_pelanggan = @id_pelanggan;";
@@ -175,42 +236,42 @@ namespace MVC_ASP.Controllers
 
     // Helper untuk koneksi ke DB
     class Helper
+    {
+        public void DBConn(ref DataSet ds, string query, NpgsqlParameter[] param)
         {
-            public void DBConn(ref DataSet ds, string query, NpgsqlParameter[] param)
+            // Data Source Name berisi credential dari database
+            string dsn = "Host=localhost;Username=postgres;Password=wawan123;Database=PBO;Port=5432";
+            // Membuat koneksi ke db
+            var conn = new NpgsqlConnection(dsn);
+            // Command untuk eksekusi query
+            var cmd = new NpgsqlCommand(query, conn);
+
+            try
             {
-                // Data Source Name berisi credential dari database
-                string dsn = "Host=localhost;Username=postgres;Password=Bima12345;Database=PBO;Port=5432";
-                // Membuat koneksi ke db
-                var conn = new NpgsqlConnection(dsn);
-                // Command untuk eksekusi query
-                var cmd = new NpgsqlCommand(query, conn);
-
-                try
+                // Perulangan untuk menyisipkan nilai yang ada pada parameter ke query
+                foreach (var p in param)
                 {
-                    // Perulangan untuk menyisipkan nilai yang ada pada parameter ke query
-                    foreach (var p in param)
-                    {
-                        cmd.Parameters.Add(p);
-                    }
-                    // Membuka koneksi ke database
-                    cmd.Connection!.Open();
-                    // Mengisi ds dengan data yang didapatkan dari database
-                    new NpgsqlDataAdapter(cmd).Fill(ds);
-                    Console.WriteLine("Query berhasil dieksekusi");
+                    cmd.Parameters.Add(p);
                 }
-                catch (NpgsqlException e)
-                {
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    // Menutup koneksi ke database
-                    cmd.Connection!.Close();
-                }
-
+                // Membuka koneksi ke database
+                cmd.Connection!.Open();
+                // Mengisi ds dengan data yang didapatkan dari database
+                new NpgsqlDataAdapter(cmd).Fill(ds);
+                Console.WriteLine("Query berhasil dieksekusi");
             }
+            catch (NpgsqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                // Menutup koneksi ke database
+                cmd.Connection!.Close();
+            }
+
         }
     }
+}
 
 
 
