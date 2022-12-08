@@ -89,6 +89,7 @@ namespace MVC_ASP.Controllers
         {
             return View();
         }
+
         public IActionResult Wajah()
         {
             return View();
